@@ -2,28 +2,29 @@
 
 namespace App\Helpers;
 
-// use App\Services\CommissionFee\Enums\OperationType;
 use Carbon\Carbon;
 
 class Transaction
 {
-    /** @var Carbon $date Operation date (Y-m-d) */
+    // date of Transaction (Y-m-d)
     public Carbon $date;
 
+    // Transaction's User
     public $userID;
 
-    /** @var OperationType $type Operation type, one from those specified in enum */
+    // Transaction's method, withdraw or deposit
     public $method;
 
+    // Transaction's type: private or business
     public $type;
 
-    /** @var string $currency Operation's currency, one from those specified in enum */
+    // Transaction's currency
     public string $currency;
 
-    /** @var float $amount Operation amount, rounded up to decimal places */
+    // Transaction's amount
     public float $amount;
 
-    // public float $commissionFee = 0;
+    public float $commissionFee = 0;
 
     public function __construct($csvRow)
     {
@@ -33,6 +34,6 @@ class Transaction
         $this->method   = $csvRow[3];
         $this->amount   = $csvRow[4];
         $this->currency = $csvRow[5];
-        // $this->commissionFee = $csvRow[4];
     }
+
 }

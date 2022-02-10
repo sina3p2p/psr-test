@@ -14,10 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::get('/test', [TestController::class, '__invoke']);
 
 // Route::post('/test', [TestController::class, '__invoke']);

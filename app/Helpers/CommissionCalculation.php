@@ -7,18 +7,26 @@ use Illuminate\Support\Facades\Http;
 
 class CommissionCalculation 
 {
-    public $private_commission  = 0.03;
-    public $business_commission = 0.03;
-    public    $currencies_rates = [];
-    protected $weekly_trx       = [];
-    protected $weekly_user_trx  = [];
-    protected $commissions      = [];
+    // max amount of weekly free transaction
+    const MAX_FREE_FEE = 1000;
 
+    // private Withdraw commission
+    const PRIVATE_COMMISSION  = 0.003;
+
+    // business Withdraw commission
+    const BUSINESS_COMMISSION = 0.005;
+
+    // currency decimal places
     const CURRENCIES_DECIMAL_PLACES = [
         'EUR' => 2,
         'JPY' => 0,
         'USD' => 2
     ];
+
+    public    $currencies_rates = [];
+    protected $weekly_trx       = [];
+    protected $weekly_user_trx  = [];
+    protected $commissions      = [];
 
     public function __construct()
     {
@@ -73,22 +81,22 @@ class CommissionCalculation
             if
             (
                 $count_withdraw_user_per_week < 3 &&  
-                $total_withdraw_user_per_week < 1000
+                $total_withdraw_user_per_week < self::MAX_FREE_FEE
             )
             {
-                if($total_withdraw_user_per_week + $price < 1000)
+                if($total_withdraw_user_per_week + $price < self::MAX_FREE_FEE)
                 {
                     $commission = 0;
                 }
                 else
                 {
-                    $amount['amount'] = $total_withdraw_user_per_week +  $price - 1000;
-                    $commission = $this->calculateFinalAmount($amount , 0.003);
+                    $amount['amount'] = $total_withdraw_user_per_week +  $price - self::MAX_FREE_FEE;
+                    $commission = $this->calculateFinalAmount($amount , self::PRIVATE_COMMISSION);
                 }
             }
             else
             {
-                $commission = $this->calculateFinalAmount($amount, 0.003);
+                $commission = $this->calculateFinalAmount($amount, self::PRIVATE_COMMISSION);
             }
 
             $this->weekly_user_trx[$trx->userID] = [
@@ -100,7 +108,7 @@ class CommissionCalculation
 
         }
 
-        return $this->calculateFinalAmount($amount, 0.005);
+        return $this->calculateFinalAmount($amount, self::BUSINESS_COMMISSION);
     }
 
     public function getTransactionsWeekly()
@@ -137,6 +145,7 @@ class CommissionCalculation
         return (ceil($number * $fig) / $fig);
     }
 
+    // Change rate for one or more currency
     public function setCustomCurrency($array)
     {
         $this->currencies_rates = array_merge($this->currencies_rates, $array);
