@@ -16,6 +16,9 @@ class CommissionCalculation
     // business Withdraw commission
     const BUSINESS_COMMISSION = 0.005;
 
+    // Deposit Commission
+    const DEPOSIT_COMMISSION = 0.0003;
+
     // currency decimal places
     const CURRENCIES_DECIMAL_PLACES = [
         'EUR' => 2,
@@ -58,7 +61,7 @@ class CommissionCalculation
                 {
                     $this->commissions[] = $this->handleWithdraw($trx);
                 }else{
-                    $this->commissions[] =  $this->calculateFinalAmount($this->getTransactionAmount($trx), 0.0003);
+                    $this->commissions[] =  $this->calculateFinalAmount($this->getTransactionAmount($trx), self::DEPOSIT_COMMISSION);
                 }
             }
         }
