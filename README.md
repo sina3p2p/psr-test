@@ -56,8 +56,8 @@ To run tests, run the following command
 
 ## Lessons Learned
 
-You can test it after run serve 
-in this url http://127.0.0.1:8000/test
+You can test it after run serve at this url http://127.0.0.1:8000/test and it's return commissions in today currency rate otherwise if you want to check output by test result what is written in doc (EUR:USD - 1:1.1497, EUR:JPY - 1:129.53.) you can run following url:
+http://127.0.0.1:8000/test?test=1
 
 You can also check logic:
 ```bash
